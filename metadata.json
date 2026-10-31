@@ -1,0 +1,8 @@
+{
+  "name": "Edge-AI Emergency Route & LED Clearance System",
+  "description": "Secure Edge-AI traffic intelligence and emergency route coordination platform with four-portal access, camera-triggered LED lane clearance, and hospital-to-hospital patient transfer coordination.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

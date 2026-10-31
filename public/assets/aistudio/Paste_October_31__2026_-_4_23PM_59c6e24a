@@ -1,0 +1,840 @@
+# MASTER PROJECT DEVELOPMENT PROMPT
+
+## Project Title
+
+**Secure Edge-AI Traffic Intelligence and Emergency Route Coordination System with Four-Portal Access, Camera-Triggered LED Lane Clearance, and Hospital-to-Hospital Patient Coordination**
+
+Act as a senior full-stack software engineer, AI/ML engineer, IoT and edge-computing specialist, cybersecurity engineer, database architect, and UI/UX designer.
+
+Design and develop a functional, secure, full-stack academic minor project that integrates four separate portals:
+
+1. Admin Portal
+2. Hospital Portal
+3. Ambulance Portal
+4. Normal User Portal
+
+The system must combine AI, IoT, cybersecurity, edge computing, GPS-based tracking, computer vision, a limited ML component, route optimization, hospital coordination, and a physical or simulated LED lane-clearance system.
+
+Do not build four disconnected applications. Build **one integrated platform with four role-specific portals**, sharing a secure backend, database, event system, and real-time notification service.
+
+The application must be suitable for a college project demonstration and designed so it can be extended into a major project next semester.
+
+---
+
+# 1. CORE PROJECT SCENARIO
+
+Consider an ambulance transporting a patient from Hospital A to Hospital B.
+
+Hospital A logs into its hospital portal, selects the ambulance assigned to the patient, chooses Hospital B as the receiving hospital, enters the required patient information, and clicks **“Confirm Transfer & Start Emergency Route.”**
+
+Once the transfer is confirmed, the following process begins:
+
+1. The backend validates the hospital, ambulance, destination, and transfer request.
+2. Hospital B receives a real-time incoming-ambulance notification.
+3. Hospital B can see the ambulance's live or simulated GPS location, recommended route, ETA, and transfer status.
+4. The route contains four monitored camera or junction points.
+5. The system activates the LED indicator associated with the first upcoming junction.
+6. The first camera or edge device detects the approaching ambulance and validates its identity.
+7. The first junction's LED indicates that the relevant lane should be cleared according to the configured prototype logic.
+8. After the ambulance passes the first checkpoint, the first checkpoint is marked passed and its indicator is deactivated.
+9. The second checkpoint becomes active, and the system continues this process through all four checkpoints.
+10. Hospital B receives a notification when each checkpoint is approached and passed.
+11. If a camera detects slow-moving or congested traffic ahead, the edge-AI module evaluates the situation and sends a traffic warning to the ambulance portal.
+12. The route engine compares alternative routes and recommends a faster feasible route when appropriate.
+13. If the route changes, the checkpoint sequence is recalculated, obsolete indicators are deactivated safely, and the relevant hospitals and ambulance operator are notified.
+14. When the ambulance arrives, Hospital B acknowledges arrival and updates the transfer status.
+
+The dashboard must show this complete sequence through a live event timeline.
+
+**Important:** The LED lane-clearance system is an academic model. Never connect it to public traffic signals or real roadside control equipment without proper authorization, engineering safeguards, and regulatory approval.
+
+---
+
+# 2. FOUR PORTALS AND THEIR RESPONSIBILITIES
+
+## Portal 1: Admin Portal
+
+Create an administrative dashboard for managing the complete platform.
+
+### Main dashboard
+
+Display:
+
+* Total registered hospitals.
+* Approved and pending hospital accounts.
+* Registered ambulances.
+* Registered normal users.
+* Active emergency transfers.
+* Active emergency requests from normal users.
+* Active camera checkpoints.
+* LED controller connectivity.
+* Current traffic alerts.
+* Security incidents.
+* Recent system activity.
+
+### Hospital management
+
+Allow the administrator to:
+
+* Register and approve hospitals.
+* Edit hospital details.
+* Manage hospital locations.
+* Configure hospital capabilities and reported resource availability.
+* Activate or suspend hospital accounts.
+* View transfer requests and hospital acknowledgements.
+
+### Ambulance management
+
+Allow the administrator to:
+
+* Register and approve ambulances.
+* Assign a unique ambulance ID.
+* Associate an ambulance with an authorized hospital or operator.
+* View the ambulance's reported location and operational status.
+* Activate or suspend an ambulance account.
+* View route history and emergency events.
+
+### Camera and IoT management
+
+Allow the administrator to:
+
+* Register camera checkpoints.
+* Assign each checkpoint to a road segment or junction.
+* Configure the route sequence for the four demonstration checkpoints.
+* Register ESP32 or simulated LED controllers.
+* Monitor device connectivity and heartbeat status.
+* View camera detections, checkpoint events, and controller failures.
+* Test LEDs in a safe test mode.
+
+### Security management
+
+Display:
+
+* Failed login attempts.
+* Invalid or unauthorized emergency requests.
+* Replayed or expired messages.
+* Failed device-authentication attempts.
+* Abnormal emergency activation patterns.
+* Unauthorized attempts to access patient information.
+* Suspicious route or LED-control requests.
+* Audit logs with timestamps and event outcomes.
+
+Administrators must not automatically have unrestricted access to every patient's detailed medical record. Enforce appropriate permissions and audit sensitive access.
+
+---
+
+## Portal 2: Hospital Portal
+
+Build a hospital-facing portal that allows Hospital A to initiate transfers and Hospital B to receive and prepare for incoming patients.
+
+### Hospital dashboard
+
+Display:
+
+* Incoming ambulances.
+* Outgoing patient transfers.
+* Active transfer requests.
+* Ambulance location on a map.
+* Estimated arrival time.
+* Current route and checkpoint progress.
+* Reported traffic conditions.
+* Hospital acknowledgement status.
+* Transfer history.
+
+### Hospital A: Sending hospital workflow
+
+Provide a form with:
+
+* Patient or transfer reference ID.
+* Patient name, only if required for the demonstration.
+* Age or other approved identifying information, if necessary.
+* Medical condition summary.
+* Emergency or transfer priority.
+* Relevant medical observations or handover notes.
+* Assigned ambulance.
+* Receiving hospital.
+* Authorized contact information, where needed.
+* Additional handover notes.
+
+Provide a destination search that lists registered hospitals and their reported capabilities.
+
+Before submitting, show a review screen confirming the destination and information being shared.
+
+When the user clicks **“Confirm Transfer & Start Emergency Route”**:
+
+1. Validate the user's role and hospital permissions.
+2. Validate the selected ambulance and receiving hospital.
+3. Save the transfer record.
+4. Create an authenticated emergency-route request.
+5. Notify Hospital B.
+6. Start the route and checkpoint workflow.
+7. Notify the assigned ambulance operator.
+8. Activate the first eligible checkpoint through the backend's authorized controller interface.
+9. Record all actions in the audit log.
+
+Prevent duplicate transfer creation when the button is clicked multiple times.
+
+### Hospital B: Receiving hospital workflow
+
+Show a prominent incoming-transfer card containing:
+
+* Sending hospital.
+* Ambulance ID.
+* Transfer reference.
+* ETA.
+* Current location.
+* Live or simulated route.
+* Current checkpoint.
+* Traffic alerts.
+* Patient handover summary, subject to permissions.
+
+Provide response actions:
+
+* Acknowledge Notification.
+* Prepare Receiving Team.
+* Ready to Receive.
+* Request Additional Information.
+* Unable to Accept.
+
+If Hospital B cannot accept the patient, do not silently redirect the ambulance. Notify the authorized operator, reassess suitable alternatives, and require confirmation of the replacement destination.
+
+### Patient information security
+
+Patient details must be protected through role-based access, least-privilege permissions, secure transport, access auditing, and data minimization.
+
+Hospital B should see only the information it is authorized to receive. Normal users must never be able to view patient medical records.
+
+Use entirely synthetic patient information during development and demonstrations.
+
+---
+
+## Portal 3: Ambulance Portal
+
+Create an ambulance interface optimized for a quick, low-distraction view.
+
+### Ambulance dashboard
+
+Display:
+
+* Ambulance ID.
+* Assigned hospital.
+* Active transfer reference.
+* Destination hospital.
+* Current location.
+* Route map.
+* ETA.
+* Traffic conditions.
+* Next checkpoint.
+* Checkpoint distance.
+* Route warnings.
+* Hospital readiness.
+* Connectivity and device status.
+
+### Route navigation
+
+Display:
+
+* Current route.
+* Alternative route.
+* Remaining distance.
+* Estimated travel time.
+* Upcoming camera checkpoints.
+* Congestion alerts.
+* Reason for a route recommendation.
+* Whether a route change is pending confirmation.
+
+### Traffic warning
+
+When an edge camera detects slow-moving traffic, show a warning containing:
+
+* Checkpoint or road segment.
+* Estimated congestion level.
+* Detection timestamp.
+* Expected impact, if it can be estimated.
+* Alternative route recommendation.
+* Reason for recommending the alternative.
+
+Avoid distracting animations and excessive interaction while the vehicle is moving.
+
+For the academic prototype, simulate route progress using a test control or playback function.
+
+### Route deviation
+
+If the ambulance deviates from the assigned route:
+
+1. Detect the deviation using the available location source.
+2. Notify the authorized operator.
+3. Recalculate the route when location and road data permit.
+4. Update the checkpoint sequence.
+5. Safely deactivate obsolete checkpoint requests.
+6. Activate the next appropriate checkpoint only after validating the updated route.
+7. Inform the receiving hospital.
+
+Do not assume that GPS is always accurate. Provide a safe fallback when location updates are missing or unreliable.
+
+---
+
+## Portal 4: Normal User Portal
+
+Create a portal for registered users, such as drivers or members of the public.
+
+### Registration and login
+
+Allow users to:
+
+* Register with basic account details.
+* Verify their email or phone where the required service is available.
+* Log in securely.
+* Manage their profile and vehicle information.
+* View notification preferences.
+* Report a problem or misuse of the emergency feature.
+
+Collect only information required for the system.
+
+### Normal-user dashboard
+
+Display:
+
+* Current or selected location.
+* Nearby active emergency-route warnings.
+* Approximate distance to an approaching ambulance, when available.
+* Relevant road or junction warnings.
+* Suggested safe action, such as keeping the emergency lane clear where safe and lawful.
+* Notification history.
+
+Users must not see patient details, private hospital handover information, ambulance operator credentials, or restricted security logs.
+
+### Emergency button
+
+Add a visible **“Emergency”** button.
+
+When selected, open an emergency-request form that asks for:
+
+* Current location or manually selected location.
+* Nature of the emergency.
+* Optional short description.
+* Contact information, where necessary.
+* Confirmation that the request is genuine.
+
+When the request is submitted:
+
+1. Authenticate the user.
+2. Validate the request.
+3. Generate a unique request ID.
+4. Record the request location and timestamp.
+5. Send the request to the authorized emergency coordination workflow.
+6. Notify the authorized dispatcher or administrator.
+7. Display the request status to the user.
+
+### Critical emergency authorization rule
+
+Clicking the Emergency button must **not automatically grant the user's private vehicle unrestricted ambulance privileges**.
+
+Instead, implement a request-and-authorization workflow:
+
+* Request Submitted.
+* Awaiting Verification.
+* Verified and Authorized, or Rejected.
+* Emergency Route Assigned.
+* Completed or Cancelled.
+
+For the academic demonstration, provide an admin/dispatcher approval screen to simulate verification.
+
+Only an authorized and approved request may activate the prototype's emergency route-priority workflow.
+
+A verified emergency request should have a clear priority policy. Ordinary users must never be able to directly control LEDs, cameras, traffic signals, or other users' routes.
+
+---
+
+# 3. CAMERA-TRIGGERED LED LANE-CLEARANCE SYSTEM
+
+This is one of the project's main demonstration features.
+
+Create a route containing four checkpoints:
+
+* Camera 1 / Junction 1.
+* Camera 2 / Junction 2.
+* Camera 3 / Junction 3.
+* Camera 4 / Junction 4.
+
+Each checkpoint should have a camera or simulated video source, an edge-processing module, a registered device identity, and a corresponding LED indicator.
+
+## Expected sequence
+
+### Initial state
+
+All emergency checkpoint indicators are off.
+
+### Hospital A confirms the transfer
+
+The backend verifies the request and activates the first eligible checkpoint.
+
+LED 1 turns on to represent an upcoming ambulance approach.
+
+The other checkpoint indicators remain off until their activation conditions are met.
+
+### Ambulance approaches Camera 1
+
+Camera 1 analyzes the video feed.
+
+The AI module detects a vehicle and estimates whether it resembles an ambulance. The system then checks location, route, time window, and authenticated ambulance identity before accepting the checkpoint event.
+
+Do not rely on visual appearance alone for authorization.
+
+### Ambulance passes Camera 1
+
+The checkpoint module records the passage.
+
+* Camera 1 changes to Passed.
+* LED 1 is deactivated.
+* Hospital B receives a checkpoint-passed notification.
+* Camera 2 becomes the next eligible checkpoint.
+* LED 2 is activated according to the checkpoint controller's safe operating rules.
+
+### Repeat for Cameras 2, 3, and 4
+
+Repeat the same process at every checkpoint.
+
+Hospital B should see a live progress tracker such as:
+
+Camera 1: Passed.
+
+Camera 2: Approaching.
+
+Camera 3: Pending.
+
+Camera 4: Pending.
+
+Arrival: Not yet confirmed.
+
+### Camera failure or uncertain detection
+
+If a camera fails, the detection confidence is insufficient, or communication is interrupted:
+
+* Do not falsely report that the ambulance has passed.
+* Mark the checkpoint as Uncertain or Offline.
+* Notify the monitoring dashboard.
+* Apply a safe fallback state.
+* Allow authorized manual confirmation in the simulation.
+
+The backend must maintain the authoritative checkpoint state. Cameras and IoT devices report observations; they must not independently authorize an emergency route.
+
+---
+
+# 4. LED CONTROLLER AND IOT IMPLEMENTATION
+
+Use an ESP32 and LEDs for the physical model, or simulate the same behaviour in the browser first.
+
+For the four-checkpoint prototype, provide:
+
+* Four LED indicators, one per checkpoint.
+* An ESP32 or a simulated controller.
+* Authenticated controller communication.
+* A heartbeat and online/offline status.
+* A unique event ID for each control action.
+* Acknowledgement of received commands.
+* Duplicate-command protection.
+* An event log for activation, deactivation, failure, and recovery.
+
+Use a safe, explicit controller state machine.
+
+Suggested states:
+
+* IDLE.
+* ROUTE_AUTHORIZED.
+* CHECKPOINT_ACTIVE.
+* AMBULANCE_APPROACHING.
+* AMBULANCE_PASSED.
+* CHECKPOINT_FAULT.
+* ROUTE_CANCELLED.
+* COMPLETED.
+
+Do not implement unsafe real traffic-signal switching. The prototype LEDs should represent a lane-clearance warning only, unless a separate, fully simulated signal controller is implemented.
+
+---
+
+# 5. AI AND EDGE COMPUTING
+
+Implement AI locally at the camera or gateway wherever practical.
+
+### Camera intelligence
+
+Use OpenCV and an appropriate lightweight pre-trained object-detection model.
+
+The module should:
+
+* Read recorded traffic video or an authorized camera stream.
+* Detect and count vehicles.
+* Estimate traffic density.
+* Identify potential slow-moving traffic.
+* Detect possible ambulance presence.
+* Generate a timestamped observation.
+* Report confidence and processing time.
+
+For ambulance passage, combine visual detection with route position and authenticated system context.
+
+A camera should not be permitted to grant emergency priority solely because it detects an ambulance-like object.
+
+### Edge processing
+
+Run the camera inference and congestion analysis locally on a laptop or Raspberry Pi.
+
+Display:
+
+* Edge device status.
+* Camera connection.
+* Inference latency.
+* Last successful detection.
+* Traffic estimate.
+* Communication status.
+* Local processing health.
+
+The system should continue only those local functions that can be safely performed during cloud disconnection. Show degraded mode visibly.
+
+---
+
+# 6. LIMITED MACHINE-LEARNING COMPONENT
+
+Use one manageable ML component rather than adding unnecessary complexity.
+
+Preferred implementation:
+
+Train a small scikit-learn model that predicts a traffic category or estimates travel time from suitable traffic features.
+
+Possible inputs:
+
+* Vehicle count.
+* Average vehicle speed, if measurable.
+* Recent traffic density.
+* Time of observation.
+* Road segment.
+* Historical simulated travel time.
+
+Possible outputs:
+
+* Low, medium, or high congestion.
+* Estimated travel time for a road segment.
+
+Compare the model against a simple rule-based baseline.
+
+Report relevant evaluation metrics, including precision, recall, F1 score, confusion matrix, or travel-time estimation error.
+
+Use separate training and test data. Do not report fabricated accuracy or claim that ML always selects the best route.
+
+The route engine should continue to use an established graph algorithm such as Dijkstra or A*; the ML model supplies estimates, not an unjustified replacement for routing logic.
+
+---
+
+# 7. AI-BASED DYNAMIC REROUTING
+
+When Camera 2 detects congestion, the edge module should publish a traffic event.
+
+The backend should:
+
+1. Verify the event source and freshness.
+2. Determine which road segment is affected.
+3. Update the relevant traffic estimate.
+4. Recalculate candidate routes.
+5. Compare the new ETA against the current route.
+6. Ignore insignificant fluctuations to avoid constant rerouting.
+7. Recommend a change only when supported by the available data.
+8. Update the ambulance and hospital dashboards.
+9. Recalculate checkpoint order.
+10. Deactivate obsolete checkpoint requests safely.
+11. Activate the next eligible checkpoint on the new route.
+
+The ambulance operator must receive a clear explanation of the recommendation.
+
+Do not reroute based on a single unverified detection. Include a confidence threshold, freshness check, and fallback when data is unavailable.
+
+---
+
+# 8. REAL-TIME NOTIFICATIONS
+
+Implement a shared event and notification service.
+
+Use WebSockets or another appropriate real-time mechanism for live dashboard updates.
+
+Events should include:
+
+* Emergency request created.
+* Emergency request verified or rejected.
+* Transfer confirmed.
+* Hospital notified.
+* Hospital acknowledgement received.
+* Ambulance location updated.
+* Checkpoint activated.
+* Ambulance approaching checkpoint.
+* Ambulance passed checkpoint.
+* Congestion detected.
+* Route recalculated.
+* Route change recommended.
+* Hospital readiness updated.
+* Ambulance arrived.
+* Transfer completed.
+* Device disconnected or recovered.
+* Security event detected.
+
+Use role-based event subscriptions so each portal receives only the events it is authorized to see.
+
+Do not send patient details to normal users.
+
+Normal users should receive only relevant, privacy-preserving road warnings, such as an approaching emergency vehicle or an affected junction. Avoid exposing precise ambulance locations to every registered user unless that disclosure is explicitly authorized and necessary.
+
+---
+
+# 9. CYBERSECURITY REQUIREMENTS
+
+Security must be part of the architecture, not just a separate dashboard.
+
+Implement:
+
+* Secure authentication.
+* Role-based access control for Admin, Hospital, Ambulance, and Normal User.
+* Hospital-to-hospital authorization rules.
+* Device registration and authentication.
+* Password hashing using a suitable password-hashing algorithm.
+* HTTPS/TLS in deployed environments.
+* HMAC or digital signatures for message authenticity and integrity.
+* Timestamps, nonces, and unique request IDs for replay prevention.
+* Rate limiting on login and emergency-request endpoints.
+* Input validation and protection against common web vulnerabilities.
+* Secure session/token handling.
+* Restricted access to medical data.
+* Audit logging for sensitive actions.
+* Duplicate-request prevention.
+* Authorization checks on every protected backend endpoint.
+* Safe handling of failed authentication and network interruptions.
+* Emergency-button abuse monitoring.
+* Signed or authenticated LED-controller commands.
+* Secure secret storage using environment variables or an appropriate secrets manager.
+
+Never place secret keys in frontend code.
+
+Do not rely on hidden buttons or frontend role checks as security. All permissions must be validated by the backend.
+
+Provide a controlled security test suite for:
+
+* Unauthorized emergency requests.
+* Replayed checkpoint messages.
+* Forged or altered commands.
+* Invalid user roles.
+* Unauthorized access to patient information.
+* Duplicate transfer submissions.
+* Abnormal emergency-request frequency.
+* Disconnected or compromised simulated devices.
+
+Run tests only against the project's own prototype and authorized lab devices.
+
+---
+
+# 10. RECOMMENDED TECHNOLOGY STACK
+
+Use the following stack unless a practical constraint requires an alternative.
+
+Frontend:
+
+* React or HTML/CSS/JavaScript.
+* A consistent responsive design system.
+* Leaflet with OpenStreetMap-compatible data for map visualization.
+
+Backend:
+
+* Python.
+* FastAPI.
+* WebSockets for real-time updates.
+
+Database:
+
+* SQLite for the initial prototype.
+* PostgreSQL as an optional future upgrade.
+
+AI and edge processing:
+
+* OpenCV.
+* A lightweight pre-trained YOLO model.
+* Local processing on a laptop, with optional Raspberry Pi deployment.
+
+Machine learning:
+
+* scikit-learn.
+
+Routing:
+
+* NetworkX with Dijkstra or A* for a demonstration road graph.
+* OpenStreetMap-derived road data or a suitable routing service when available.
+
+IoT:
+
+* ESP32.
+* LEDs.
+* Authenticated controller communication.
+* Simulated hardware mode when the physical controller is unavailable.
+
+Testing:
+
+* Pytest.
+* API tests.
+* Security tests.
+* Recorded traffic videos.
+* Optional SUMO traffic simulation.
+
+Explain all dependencies, setup commands, API requirements, and hardware alternatives.
+
+---
+
+# 11. DATABASE DESIGN
+
+Create structured database tables for:
+
+* Users.
+* Roles and permissions.
+* Hospitals.
+* Hospital capabilities and reported availability.
+* Ambulances.
+* Emergency requests.
+* Patient transfer records.
+* Authorized patient handover information.
+* Routes and route alternatives.
+* Camera checkpoints.
+* Camera observations.
+* LED controllers.
+* LED activation events.
+* Ambulance location history.
+* Hospital notifications and acknowledgements.
+* User road warnings.
+* Security events.
+* Audit logs.
+* ML observations and predictions.
+
+Use appropriate foreign keys, indexes, timestamps, and status fields.
+
+Do not store passwords in plaintext. Avoid storing unnecessary patient data. Separate sensitive medical records from general route and event information wherever practical.
+
+Use synthetic records during development.
+
+---
+
+# 12. REQUIRED USER INTERFACE DESIGN
+
+Create a professional, modern emergency-coordination interface.
+
+Use:
+
+* Dark navy or slate sidebar.
+* Blue and teal primary accents.
+* Emergency orange for warnings.
+* Clear status labels.
+* Responsive layouts.
+* Accessible contrast.
+* Consistent navigation.
+* Loading and error states.
+* Live event timestamps.
+* Clear online/offline indicators.
+
+Build a different dashboard layout for each of the four portals while maintaining consistent branding.
+
+The main admin dashboard should include an overview of active routes, checkpoint states, connected devices, hospital responses, traffic alerts, and security events.
+
+The hospital dashboard should prominently display incoming transfers and checkpoint progress.
+
+The ambulance dashboard should prioritize navigation, ETA, traffic warnings, and the next checkpoint.
+
+The normal-user dashboard should prioritize nearby road warnings and a carefully controlled emergency-request flow.
+
+Every visible button must perform its advertised function. Do not create decorative buttons that do nothing.
+
+---
+
+# 13. TESTING AND ACCEPTANCE CRITERIA
+
+The prototype is complete only when the following scenario can be demonstrated from start to finish.
+
+1. Admin registers Hospital A, Hospital B, an ambulance, four checkpoints, and the simulated LED controller.
+2. Hospital A logs in and creates a patient transfer to Hospital B.
+3. Hospital B receives the transfer notification.
+4. The ambulance portal shows the assigned destination, route, and ETA.
+5. The first checkpoint indicator activates after authorization.
+6. The camera simulation detects the ambulance under the configured conditions.
+7. The system records the first checkpoint passage.
+8. The first indicator deactivates and the next eligible indicator activates.
+9. Hospital B sees the checkpoint progress update.
+10. A congestion event is detected ahead.
+11. The route engine compares alternatives and recommends a route update when justified.
+12. The ambulance and hospital dashboards receive the route update.
+13. The checkpoint sequence is safely updated.
+14. A registered normal user receives a relevant road warning without access to medical information.
+15. A normal user submits an emergency request and receives a pending-verification status.
+16. The authorized admin/dispatcher approves or rejects the request.
+17. An unauthorized request or replayed controller command is rejected and logged.
+18. The ambulance reaches Hospital B and the transfer is marked completed.
+19. The report page displays the actual recorded experiment results.
+
+If any physical component is unavailable, provide a functional simulator with the same event flow and clearly label it as simulated.
+
+---
+
+# 14. DEVELOPMENT PLAN
+
+Develop the project incrementally.
+
+Phase 1: Authentication, roles, database, and four portal layouts.
+
+Phase 2: Hospital registration, ambulance assignment, and patient-transfer workflow.
+
+Phase 3: Map, ambulance location simulation, route calculation, and ETA.
+
+Phase 4: Hospital notifications and live checkpoint progress.
+
+Phase 5: Four-camera checkpoint simulator and sequential LED state machine.
+
+Phase 6: Camera AI, traffic-density estimation, and congestion warnings.
+
+Phase 7: Dynamic rerouting and checkpoint recalculation.
+
+Phase 8: Normal-user notifications and emergency-request authorization.
+
+Phase 9: IoT integration using ESP32 and LEDs.
+
+Phase 10: Cybersecurity controls, security tests, reports, and documentation.
+
+After each phase, run the application, test the implemented features, and fix errors before proceeding.
+
+Do not attempt to produce all the code in one response. Maintain a working codebase and build on it phase by phase.
+
+---
+
+# 15. FINAL DELIVERABLES
+
+Provide:
+
+1. Complete source code.
+2. Organized project folder structure.
+3. Database schema and sample synthetic data.
+4. Four functional portals.
+5. Backend APIs and real-time event service.
+6. AI traffic-detection module.
+7. Limited ML component with evaluation.
+8. Route calculation and dynamic rerouting.
+9. Camera/checkpoint simulator.
+10. Optional ESP32 LED controller integration.
+11. Cybersecurity controls and tests.
+12. Installation and execution instructions.
+13. Environment configuration example.
+14. API documentation.
+15. Architecture and workflow diagrams.
+16. Test cases and measured evaluation reports.
+17. Project report outline.
+18. Demonstration script.
+19. Viva questions and answers.
+20. A modular design for future major-project expansion.
+
+## Final instruction
+
+Start by explaining the architecture and data flow across the four portals. Then provide the folder structure, database design, API list, and development plan.
+
+After that, implement Phase 1 as a working application with all four portals and secure role-based login.
+
+Clearly distinguish implemented functionality from simulated functionality. Never fabricate live camera detections, GPS positions, hospital acknowledgements, ML accuracy, or performance results.
+
+Prioritize correctness, security, simplicity, and demonstrability over unnecessary complexity.
